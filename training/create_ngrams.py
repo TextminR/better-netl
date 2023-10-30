@@ -47,14 +47,13 @@ for line in h:
     line = line.strip()
     list_labels.append(line)
 list_labels= set(list_labels)
-print "file loaded"
+print("file loaded")
 
 
 def get_phrases(filenames):
     input,output = filenames
     cnt =0
-    print "output file name"
-    print output
+    print("output file name", output)
     f = open(input, 'r')
     doc_number =0
     lines =[]
@@ -62,7 +61,7 @@ def get_phrases(filenames):
         if "<doc" in line:
             doc_number =doc_number +1        # Just to keep a track that documents are being processed and their count.
             if (doc_number % 5000 ==0):      # Print number every 500 documents. Since files are multiprocessed count numbers can be repititive.
-                print "Documents processed "+str(doc_number)
+                print("Documents processed ", doc_number)
         else:
             words = line.split(" ")
             bigram = ngrams(words,2)
@@ -108,13 +107,15 @@ for item in list_files:
     for elem in subfiles:
         input_file = inp_subdir + "/"+elem  
         output_file = out_subdir + "/"+elem+"_ngram"
-	inp_filenames.append(input_file) # Getting path of all files that needs to be converted in ngrams.
+        inp_filenames.append(input_file) # Getting path of all files that needs to be converted in ngrams.
         out_filenames.append(output_file)# The output names with for files with path.
 
-print "Got all files"
-print "Converting to ngram phrases"
+print("Got all files")
+print("Converting to ngram phrases")
 
-cores = mp.cpu_count()
-pool = Pool(processes = cores)
-y_parallel = pool.map(get_phrases,zip(inp_filenames,out_filenames))
+# cores = mp.cpu_count()
+# pool = Pool(processes = cores)
+for filenames in zip(inp_filenames,out_filenames):
+    get_phrases(filenames)
+# y_parallel = pool.map(get_phrases,zip(inp_filenames,out_filenames))
 

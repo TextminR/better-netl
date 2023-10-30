@@ -25,8 +25,8 @@ args = parser.parse_args()
 # Checks if the output directory specified already exists. If it does removes it.
 
 if os.path.isdir(args.output_dir):
-    del_query = "rm -r "+args.output_dir
-    os.system(del_query)
+		del_query = "rm -r "+args.output_dir
+		os.system(del_query)
 
 # Gets all the sub directories from the location
 list_files = os.listdir(args.input_dir)
@@ -38,17 +38,17 @@ classpath = args.parser_loc +"/stanford-parser.jar"
 query1 = "mkdir "+args.output_dir
 os.system(query1)
 for item in list_files:
-    if os.path.isdir(args.input_dir+"/"+item):
-        inp_subdir =args.input_dir +"/"+ item # Getting the full path for subdirectories which needs to be tokenized.
-        subfiles = os.listdir(inp_subdir)     # listing the files in subdirectory
-        out_subdir = args.output_dir +"/"+ item 
-        query = "mkdir " +out_subdir  # making new sub directories in output location, so that the directory structure of tokenised file is same as input directory
-	os.system(query)   
-    
-        for elem in subfiles:
-            input_file = inp_subdir + "/"+elem  # Working on files in subdirectory. We need to tokenize them
-	    output_file = out_subdir + "/"+elem
-            query2 = "java -cp "+ classpath +" edu.stanford.nlp.process.PTBTokenizer -preserveLines --lowerCase <"+input_file+"> "+output_file # Java commanf to stanford tokenizer
-            print "Executing query"
-            print query2
-            os.system(query2)
+		if os.path.isdir(args.input_dir+"/"+item):
+				inp_subdir =args.input_dir +"/"+ item # Getting the full path for subdirectories which needs to be tokenized.
+				subfiles = os.listdir(inp_subdir)     # listing the files in subdirectory
+				out_subdir = args.output_dir +"/"+ item 
+				query = "mkdir " +out_subdir  # making new sub directories in output location, so that the directory structure of tokenised file is same as input directory
+				os.system(query)   
+		
+				for elem in subfiles:
+						input_file = inp_subdir + "/"+elem  # Working on files in subdirectory. We need to tokenize them
+						output_file = out_subdir + "/"+elem
+						query2 = "java -cp "+ classpath +" edu.stanford.nlp.process.PTBTokenizer -preserveLines --lowerCase <"+input_file+"> "+output_file # Java commanf to stanford tokenizer
+						print("Executing query")
+						print(query2)
+						os.system(query2)

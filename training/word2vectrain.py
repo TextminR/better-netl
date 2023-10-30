@@ -58,13 +58,12 @@ sentences = MySentences(args.input_dir)
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 # Model initialization
-model = gensim.models.Word2Vec(size = 300, window=5, min_count = 20, workers = cores, sample =0.00001, negative = 5, sg =1)
+model = gensim.models.Word2Vec(vector_size = 300, window=5, min_count = 20, workers = cores, sample =0.00001, negative = 5, sg =1)
 model.build_vocab(sentences)
 
 # Model Training
-for epoch in range(int(args.epochs)):
-    model.train(sentences)
-    print "epoch completed"
-    print epoch +1
+model.train(sentences, total_examples=model.corpus_count, epochs=int(args.epochs))
+# for epoch in range(int(args.epochs)):
+#     print("epoch completed", epoch+1)
 
 model.save(output)

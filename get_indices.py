@@ -17,7 +17,7 @@ import re
 import pickle
 
 #Global Parameters
-doc2vec_model = "model_run/pre_trained_models/doc2vec/docvecmodel.d2v"   # Trained Doc2vec Model
+doc2vec_model = "model_run/pre_trained_models/doc2vec/doc2vecmodel.d2v"   # Trained Doc2vec Model
 word2vec_model = "model_run/pre_trained_models/word2vec/word2vec" # Trained word2vec model
 short_label_documents = "short_label_documents" # The file created by pruned_documents.py. FIltering short or long title documents.
 short_label_word2vec_tokenised = "training/additional_files/word2vec_phrases_list_tokenized.txt" #The file created by word2vec_phrases.py Removing brackets from filtered wiki titles.
@@ -43,13 +43,15 @@ def get_word(word):
 # Load the trained doc2vec and word2vec models.
 model1 =Doc2Vec.load(doc2vec_model)
 model2 = Word2Vec.load(word2vec_model)
-print "Models loaded"
+print("Models loaded")
 
 # Loading the pruned tiles and making a set of it
-with open(short_label_documents,"r") as k:
+with open(short_label_documents,"rb") as k:
     doc_labels = pickle.load(k)
+    doc_labels = [x.decode("utf-8") for x in doc_labels]
+
 doc_labels = set(doc_labels)
-print "Pruned document titles loaded"
+print("Pruned document titles loaded")
 
 # laoding thw phrasses used in training word2vec model. And then replacing space with underscore.
 h = open(short_label_word2vec_tokenised,'r')
@@ -64,8 +66,9 @@ for words in list_labels:
     new = words.split(" ")
     temp ='_'.join(new)
     word2vec_labels.append(temp)
+
 word2vec_labels = set(word2vec_labels)
-print "Word2vec model phrases loaded"
+print("Word2vec model phrases loaded")
 
 doc_indices =[]
 word_indices =[]
@@ -75,18 +78,21 @@ for elem in doc_labels:
     status,item = get_word(elem)
     if status:
         try:
-            val = model1.docvecs.doctags[elem].offset
+            # val = model1.dv.doctags[elem].offset
+            val = model1.dv.key_to_index.get(elem.encode('utf-8'))
             doc_indices.append(val)
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
 # Finds the corseponding index from word2vec model
 for elem in word2vec_labels:
     try:
-        val = model2.vocab[elem].index
+        # val = model2.vocab[elem].index
+        val = model2.wv.key_to_index.get(elem)
         word_indices.append(val)
     except:
         pass
+# print([index for index in word_indices if index is not None])
 
 # creating output indices file
 with open(doc2vec_indices_output,'wb') as m:

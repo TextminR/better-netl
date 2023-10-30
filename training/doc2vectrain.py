@@ -17,7 +17,7 @@ import argparse
 import codecs
 import unicodedata
 import multiprocessing
-from gensim.models.doc2vec import LabeledSentence
+from gensim.models.doc2vec import TaggedDocument
 from gensim.models import Doc2Vec
 import logging
 
@@ -58,7 +58,7 @@ class LabeledLineSentence(object):
                         if m:
                             found = m.group(1)
                             found = found.lower()
-			    found = unicodedata.normalize("NFKD", found) 
+                            found = unicodedata.normalize("NFKD", found) 
                             found = found.replace(" ","_") 
                             found = found.encode('utf-8')
 					   
@@ -72,7 +72,7 @@ class LabeledLineSentence(object):
                         if "</doc" in line:
                             if found!= "":
                             
-                                yield LabeledSentence(words = values, tags = [found])
+                                yield TaggedDocument(words = values, tags = [found])
                                 
 cores = multiprocessing.cpu_count() 
 filenames=[]
@@ -88,12 +88,13 @@ sentences= LabeledLineSentence(filenames)
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 #Doc2Vec model initialization and parameters 
-model =Doc2Vec(size=300, window=15, min_count=20, sample=1e-5, workers=cores, hs=0, dm=0, negative=5, dbow_words=1, dm_concat=0)
+model =Doc2Vec(vector_size=300, window=15, min_count=20, sample=1e-5, workers=cores, hs=0, dm=0, negative=5, dbow_words=1, dm_concat=0)
 model.build_vocab(sentences)
 
-#Model Training 
-for epoch in range(int(args.epochs)):
-    model.train(sentences)
-    print "Epoch completed: "+str(epoch+1)
+#Model Training
+epochs = int(args.epochs)
+model.train(sentences, total_examples=model.corpus_count, epochs=epochs)
+# for epoch in range(int(args.epochs)):
+#     print("Epoch completed: ", epoch+1)
    
 model.save(output)

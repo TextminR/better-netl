@@ -75,25 +75,25 @@ args = parser.parse_args()
 
 if args.extract:  
     query1 = "python extract.py "+wiki_extractor_path+" "+input_dump +" "+size+" "+template+" " +output_processed_directory
-    print query1
+    print(query1)
     os.system(query1)
 
 if args.tokenize:
     query2 = "python tokenisation.py "+loc_parser +" "+input_directory_to_tokenize+" "+output_directory
-    print query2
+    print(query2)
     os.system(query2)
 
 if args.doc2vectrain:
     query3 = "python doc2vectrain.py "+str(epochs_doc2vec) +" "+documents_tokenised+" "+output_dir_doc2vec
-    print query3
+    print(query3)
     os.system(query3)
 
 if args.ngrams:
    query4 = "python create_ngrams.py "+word2vec_phrase_file+" "+input_dir_ngrams +" "+output_dir_ngrams
-   print query4
+   print(query4)
    os.system(query4)
 
 if args.word2vectrain:
     query5 = "python word2vectrain.py "+str(epochs_word2vec) +" "+input_dir_word2vec+" "+output_dir_word2vec
-    print query5
+    print(query5)
     os.system(query5)

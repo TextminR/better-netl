@@ -36,7 +36,7 @@ def get_labels(filename):
                 found = m.group(1)
                 found = unicodedata.normalize("NFKD", found) # next few steps are encodeing and ecoding betwen utf and unicode
                 found = found.replace(" ","_")
-                found = found.encode('utf-8')
+                # found = found.encode('utf-8')
             except:
                 found =""
             values=[]
@@ -49,7 +49,7 @@ def get_labels(filename):
                 if "</doc" in line:                     # checks if we reach end of that particular document and if condition ois satisfied title is added into list. 
                     temp_list= found.split("_")
                     if (len(values) > doc_length) and (len(temp_list) < title_length):
-   		        list_labels.append(found)
+                        list_labels.append(found.encode('utf-8'))
    
     return list_labels
 
@@ -60,16 +60,19 @@ for path,subdirs,files in os.walk(tokenised_wiki_directory):
         temp = os.path.join(path, name)
         filenames.append(temp)
 
-print "Got all files"
+print("Got all files")
 # Multiprocess files
-cores = mp.cpu_count()
-pool = Pool(processes = cores)
-y_parallel = pool.map(get_labels, filenames)
+# cores = mp.cpu_count()
+# pool = Pool(processes = cores)
+y_parallel = []
+for i in range(len(filenames)):
+    y_parallel.append(get_labels(filenames[i]))
+# y_parallel = pool.map(get_labels, filenames)
 
 # converting a list of list into list
 all_docs = [item for sublist in y_parallel for item in sublist]
 
 #Writing into pickle file
-print "Writng labels to picke file"
-with open(output_filename,'w') as k:
+print ("Writng labels to picke file")
+with open(output_filename,'wb') as k:
     pickle.dump(all_docs,k)
