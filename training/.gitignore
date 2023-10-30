@@ -1,0 +1,11 @@
+dump/
+!dump/readme.txt
+
+processed_documents/*
+!processed_documents/readme.txt
+
+support_packages/*
+!support_packages/readme.txt
+
+trained_models/*
+!trained_models/readme.txt
