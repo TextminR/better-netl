@@ -1,6 +1,6 @@
 # better-netl
 
-A Python 3 fork of Shraey Bhatia's NETL approach.
+A Python 3 fork of [Shraey Bhatia's NETL approach](https://arxiv.org/abs/1612.05340).
 
 > [!NOTE]  
 > This README is under construction. If you are looking for the original README, check out [Shraey Bhatias repository](https://github.com/sb1992/NETL-Automatic-Topic-Labelling-).
