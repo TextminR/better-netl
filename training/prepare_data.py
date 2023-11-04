@@ -15,7 +15,7 @@ OUTPUT_FILE = 'wiki_tokenized.pickle'
 
 parser = ArgumentParser()
 parser.add_argument('subset', type=str, help='Subset of the wikipedia dataset to use (e.g. "en", "simple")')
-parser.add_argument('--server', type=str, default=CORENLP_SERVER_URL, help='URL of the CoreNLP server to use')
+parser.add_argument('--server', type=str, default=CORENLP_SERVER_URL, help='URL of the CoreNLP server to use (default: %(default)s)')
 
 def load_data(subset: str):
   logging.info('Loading data')
