@@ -1,5 +1,4 @@
 from argparse import ArgumentParser
-from turtle import listen
 
 import pandas as pd
 import numpy as np
@@ -8,7 +7,6 @@ from numpy.linalg import norm
 from gensim.models import Doc2Vec
 from gensim.models import Word2Vec
 from gensim import matutils
-from torch import repeat_interleave
 
 parser = ArgumentParser()
 parser.add_argument('doc2vec_path', type=str, help='Path to the doc2vec model')
