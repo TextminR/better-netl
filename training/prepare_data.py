@@ -1,4 +1,5 @@
 import logging
+import sys
 from tqdm import tqdm
 from argparse import ArgumentParser
 
@@ -24,12 +25,13 @@ def tokenize(data: pd.DataFrame, server_url: str):
   parser = CoreNLPParser(url = server_url)
   
   logging.info('Tokenizing data')
-  data['text'] = data['text'].str.lower()
-  data['text'] = data['text'].str.replace('\n', ' ')
+  data['text'] = data['text'].str.lower().replace('\n', ' ')
 
   for i in tqdm(range(len(data))):
     try:
       data['text'][i] = ' '.join(parser.tokenize(data['text'][i].strip()))
+    except KeyboardInterrupt:
+      sys.exit()
     except:
       logging.warning(f'Failed to tokenize text with id {data["id"][i]}. Skipping.')
 
