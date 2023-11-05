@@ -19,9 +19,7 @@ def cosine_similarity(a: np.array, b: np.array):
 def normalize(a: np.array):
   return a / norm(a)
 
-def get_labels(doc2vec, word2vec, 
-               topics: dict):
-
+def get_labels(doc2vec, word2vec, topics: dict):
   doc2vec_dv_norms = normalize(doc2vec.dv.vectors)
   doc2vec_wv_norms = normalize(doc2vec.wv.vectors)
   word2vec_wv_norms = normalize(word2vec.wv.vectors)
