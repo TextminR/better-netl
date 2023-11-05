@@ -31,7 +31,7 @@ class WikipediaCorpus:
 
 
 def train_word2vec(
-    corpus: WikipediaCorpus,
+    corpus: str,
     epochs: int = EPOCHS,
     vector_size: int = VECTOR_SIZE,
     window: int = WINDOW_SIZE,
@@ -50,9 +50,9 @@ def train_word2vec(
     negative = negative,
     sg = sg
   )
-  model.build_vocab(corpus)
+  model.build_vocab(corpus_file = corpus)
 
-  model.train(corpus, total_examples=model.corpus_count, epochs=epochs)
+  model.train(corpus_file = corpus, total_examples=model.corpus_count, total_words=model.corpus_total_words, epochs=epochs)
 
   return model
 
@@ -74,9 +74,10 @@ if __name__ == '__main__':
   parser.add_argument('--sg', type=int, default=USE_SKIP_GRAM, metavar='USE_SKIP_GRAM', help='Whether to use skip-gram')
   args = parser.parse_args()
 
-  corpus = WikipediaCorpus(args.data)
+  # corpus = WikipediaCorpus(args.data)
+
   model = train_word2vec(
-    corpus,
+    args.data,
     epochs = args.epochs,
     vector_size = args.vector_size,
     window = args.window_size,
