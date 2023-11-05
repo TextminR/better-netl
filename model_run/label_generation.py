@@ -13,8 +13,11 @@ parser.add_argument('doc2vec_path', type=str, help='Path to the doc2vec model')
 parser.add_argument('word2vec_path', type=str, help='Path to the word2vec model')
 parser.add_argument('topics', type=str, help='Path to the topic file')
 
-cos_sim = lambda a, b: np.dot(a, b) / (norm(a) * norm(b))
-normalize = lambda a: a / norm(a)
+def cosine_similarity(a: np.array, b: np.array):
+  return np.dot(a, b) / (norm(a) * norm(b))
+
+def normalize(a: np.array):
+  return a / norm(a)
 
 def get_labels(doc2vec, word2vec, 
                topics: dict):
@@ -65,7 +68,6 @@ if __name__ == '__main__':
 
   topics = pd.read_csv(args.topics)
   topic_list = topics.set_index('topic_id').T.to_dict('list')
-  # print(topic_list)
   
   for result in get_labels(doc2vec, word2vec, topic_list):
     print(result)
