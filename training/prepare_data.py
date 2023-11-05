@@ -2,13 +2,15 @@ import logging
 import sys
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
-from argparse import ArgumentParser
 
 from datasets import load_dataset
 
 from nltk.parse import CoreNLPParser
 
-def tokenize_wiki(subset: str, parser_url: str):
+CORENLP_SERVER_URL = 'http://localhost:9000'
+OUTPUT_FILE = 'wiki_tokenized.pickle'
+
+def tokenize_wiki(subset: str, parser_url: str = CORENLP_SERVER_URL):
   logging.info('Loading data')
   data = load_dataset('wikipedia', f'20220301.{subset}', split='train').to_pandas().drop(columns=['url'])
 
@@ -30,10 +32,9 @@ def tokenize_wiki(subset: str, parser_url: str):
   return data
 
 if __name__ == '__main__':
-  logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', level=logging.INFO, datefmt='%H:%M:%S%p')
+  from argparse import ArgumentParser
 
-  CORENLP_SERVER_URL = 'http://localhost:9000'
-  OUTPUT_FILE = 'wiki_tokenized.pickle'
+  logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', level=logging.INFO, datefmt='%H:%M:%S%p')
 
   parser = ArgumentParser()
   parser.add_argument('subset', type=str, help='Subset of the wikipedia dataset to use (e.g. "en", "simple")')
